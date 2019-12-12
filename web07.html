@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,">
+	<meta http-equiv="X-UA-Compatible" ie=edge >
+	<title>Document</title>
+<script type="text/javascript" src="js/animate.js">
+	
+	
+</script>
+<style type="text/css">
+	*{
+		margin:0 auto;
+	}
+	ul{
+		list-style:none;
+	}
+	li{
+		list-style:none;
+	}
+	.totle{
+		margin-left:20px;
+		margin-right:20px;
+		height:1000px;
+		border-left:black 3px solid;
+		border-right:black 3px solid;
+	}
+	#header{
+		height:26px;
+		background-color:gray;
+	}
+	#boxsmall{
+		width:900px;
+		overflow: hidden;
+		display:inline-block;
+	}
+	#wen{
+		color:red;
+		font-size:0.8em;
+		margin-top:5px;
+		position:relative;
+		left:800px;
+	}
+	#img1{
+		margin-left:200px;
+		margin-top:4px;
+	}
+
+
+	.box{
+		width:1200px;
+		height:387px;
+		margin:100px auto;
+		position:relative;
+		overflow:hidden;
+		margin-top:10px;
+	}
+	.slider{
+		width:8400px;
+		position:absolute;
+		left:-1200px;
+	}
+	.slider>div{
+		width:1200px;
+		display:inline-block;
+		float:left;
+	}
+	span{
+		display:block;
+		width:30px;
+		height:50px;
+		text-align:center;
+		cursor:pointer;
+		/*color:white;*/
+		/*color:black;*/
+		/*width:5px;
+		height:5px;*/
+		background-color:red;
+		font-size:30px;
+		top:175px;
+		line-height:50px;
+		position:absolute;
+		opacity:0;
+		/*float:left;*/
+	}
+	#left{
+		left:30px;
+	}
+	#right{
+		right:30px;
+	}
+	.nav{
+		position:absolute;
+		left:450px;
+		/*bottom:0px;*/
+		padding-top:341px;
+	}
+	.nav>li{
+		width:22px;
+		height:22px;
+		background-color:gray;
+		float:left;
+		cursor:pointer;
+		margin:0 12px;
+		border-radius:50%;
+		text-align:center;
+	}
+	#active{
+		background:red;
+	}
+
+	
+</style>
+</head>
+<body>
+	<div class="totle">
+		<div id="header">
+			<img id="img1" src="images/a15.png">
+			<div id="boxsmall">
+				<div id="wen">[温馨提示]最近有不少不法分子在网上骗人，请大家注意!!!</div>
+			</div>
+		</div>
+
+		<div class="box" id="box">
+			<div class="slider" id="slider">
+				<div class="tutu"><img src="images/b5.png" alt=""></div>
+				<div class="tutu"><img src="images/b1.png" alt=""></div>
+				<div class="tutu"><img src="images/b2.png" alt=""></div>
+				<div class="tutu"><img src="images/b3.png" alt=""></div>
+				<div class="tutu"><img src="images/b4.png" alt=""></div>
+				<div class="tutu"><img src="images/b5.png" alt=""></div>
+				<div class="tutu"><img src="images/b1.png" alt=""></div>
+			</div>
+
+			<span id="left"><</span>
+			<span id="right">></span>
+
+			<ul class="nav" id="nav">
+				<li id="active">1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+				<li>5</li>
+			</ul>
+		</div>
+
+	</div>
+</body>
+<script>
+
+	var box=document.getElementById("box");
+	var nav=document.getElementById("nav").children;
+	var slider=document.getElementById("slider");
+	var right=document.getElementById("right");
+	var left=document.getElementById("left");
+	var wen=document.getElementById("wen");
+
+	var c=1;
+	var k=800;
+	function huadong(){
+		
+		wen.style.left=(k-5*c)+'px';
+		console.log(k-5*c);
+		c++;
+
+		if(c*5>1600){
+			wen.style.left="800px";
+			c=1;
+		}
+	}
+	setInterval(huadong,100);
+
+
+	var m=1;
+	var timer;
+	var isMoving=false;
+
+	function next(){
+		m++;
+		yangs();
+		animate(slider,{left:-1200*m},function(){
+			if(m===6){
+				slider.style.left="-1200px";
+				m=1;
+			}
+		});
+	}
+
+	function pre(){
+		m--;
+		yangs();
+		animate(slider,{left:-1200*m},function(){
+			if(m===0){
+				slider.style.left="-6000px";
+				m=5;
+			}
+		});
+	}
+
+	var time=setInterval(next,2000);
+
+	box.onmouseover=function(){
+		animate(left,{
+			opacity:50});
+		animate(right,{opacity:50});
+		clearInterval(time);
+	}
+	box.onmouseout=function(){
+		animate(left,{opacity:0});
+		animate(right,{opacity:0});
+		time=setInterval(next,2000);
+	}	
+
+	right.onclick=next;
+	left.onclick=pre;
+
+	for(var i=0;i<nav.length;i++){
+		nav[i].idx=i;
+		nav[i].onclick=function(){
+			//console.log(this.idx);
+			m=this.idx+1;
+			yangs();
+			animate(slider,{left:-1200*m});
+		}
+	}
+
+	function yangs(){
+		for(var i=0;i<nav.length;i++){
+			nav[i].id="";
+		}
+		if(m===6){
+			nav[0].id="active";
+		}
+		else if(m===0){
+			nav[4].id="active";
+		}
+		else{
+			nav[m-1].id="active";
+		}
+	}
+
+
+
+
+</script>
+</html>
